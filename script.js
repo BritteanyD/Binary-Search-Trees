@@ -75,47 +75,48 @@ class Tree {
       }
     }
   };
-  deleteNode = (value) => {
-    let currentNode = this.root, parentNode = null
-    while (currentNode !== value) {
-        parentNode = currentNode
-      if (currentNode.value < value) {
-        currentNode = currentNode.right;
+
+  deleteNode = value => {
+    let curNode = this.root;
+    let parentNode = null;
+    while (curNode.value !== value) {
+      parentNode = curNode;
+      if (curNode.value > value) {
+        curNode = curNode.left;
       } else {
-        
-        currentNode = currentNode.left;
+        curNode = curNode.right;
       }
     }
-    //node value doesn't exist
-    if(currentNode === null){
-        return
-    }
-    // leaf node
-    if (currentNode.left === null && currentNode.right === null) {
-        if (value < parentNode.value) {
-            parentNode.left = null
-        }
-        else { 
-            parentNode.right = null
-        }
-    }
-    //two children
-    else if (currentNode.left !== null && currentNode.right !== null) {
-        this.deleteNodeWith2Children(curNode);
-    }
-    // one child
-    else {
-        if (currentNode.left !== null) {
-            currentNode.value = currentNode.left.value;
-            currentNode.left = null;
-          } else {
-            currentNode.value = currentNode.right.value;
-            currentNode.right = null;
-          }
-    }
-  }
 
-deleteNodeWith2Children = nodeToDelete => {
+    //doesn't exist
+    if (curNode === null) {
+      return;
+    }
+
+    //leaf
+    if (curNode.left === null && curNode.right === null) {
+      if (value < parentNode.value) {
+        parentNode.left = null;
+      } else {
+        parentNode.right = null;
+      }
+    }
+    //2 children
+    else if (curNode.left !== null && curNode.right !== null) {
+      this.deleteNodeWith2Children(curNode);
+    }
+    //1 child
+    else {
+      if (curNode.left !== null) {
+        curNode.value = curNode.left.value;
+        curNode.left = null;
+      } else {
+        curNode.value = curNode.right.value;
+        curNode.right = null;
+      }
+    }
+  };
+  deleteNodeWith2Children = nodeToDelete => {
     const value = nodeToDelete.value;
     let curNode = this.root,
       inorderSuccessorNode = null,
@@ -135,6 +136,67 @@ deleteNodeWith2Children = nodeToDelete => {
       parentOfInorderSuccessorNode.left = null;
     } else {
       parentOfInorderSuccessorNode.right = null;
+    }
+  };
+
+  
+
+  levelOrderRecursive = (cb) => {
+    const map = new Map();
+    this.levelOrderRecursiveHelper(this.root, 1, map);
+    let level = 1;
+    const res = [];
+    while (map.has(level)) {
+      const arr = map.get(level++);
+      for (const node of arr) {
+        if (cb) {
+          cb(node);
+        } else {
+          res.push(node.value);
+        }
+      }
+    }
+    if (!cb) {
+      return res;
+    }
+  };
+
+  levelOrderRecursiveHelper = (cur, level, map) => {
+    if (!map.has(level)) {
+      map.set(level, []);
+    }
+    map.get(level).push(cur);
+    if (cur.left !== null) {
+      this.levelOrderRecursiveHelper(cur.left, level + 1, map);
+    }
+    if (cur.right !== null) {
+      this.levelOrderRecursiveHelper(cur.right, level + 1, map);
+    }
+  };
+
+  levelOrderIterative = (cb) => {
+    const q = [];
+    const res = [];
+    q.push(this.root);
+    while (q.length > 0) {
+      const size = q.length;
+      for (let i = 0; i < size; i++) {
+        const curNode = q.shift();
+        if (curNode.left !== null) {
+          q.push(curNode.left);
+        }
+        if (curNode.right !== null) {
+          q.push(curNode.right);
+        }
+        if (cb) {
+          cb(curNode);
+        } else {
+          res.push(curNode.value);
+        }
+      }
+    }
+    if (!cb) {
+      return res;
     }
   };
 
@@ -170,11 +232,11 @@ tree.insert(1);
 tree.prettyPrint();
 tree.insert(23);
 tree.prettyPrint();
-tree.delete(55);
+tree.deleteNode(6);
 tree.prettyPrint();
-tree.delete(33);
+tree.deleteNode(8);
 tree.prettyPrint();
-tree.delete(29);
+tree.deleteNode(23);
 tree.prettyPrint();
 console.log(tree.find(7));
 console.log(tree.find(73));
