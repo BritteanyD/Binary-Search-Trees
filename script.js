@@ -11,32 +11,45 @@ class Tree {
     this.root = this.buildTree(arr);
   }
   buildTree = (arr) => {
-    console.log(arr);
     arr.sort(function(a, b) {
         return a - b;
     });
-    console.log(arr);
+    const length = arr.length
+    return this.buildTreeHelper(arr, 0, length - 1)
   }
-  prettyPrint = (node, prefix = "", isLeft = true) => {
+  buildTreeHelper = (arr, left, right) => {
+    //base case
+    if(left > right) {
+        return null;
+    }
+    const mid = left + Math.floor((right - left) / 2);
+    const value = arr[mid]
+    const newNode = new Node(value)
+    newNode.left = this.buildTreeHelper(arr, left, mid-1)
+    newNode.right = this.buildTreeHelper(arr, mid + 1, right)
+    return newNode;
+  }
+
+  prettyPrint = (node = this.root, prefix = "", isLeft = true) => {
     if (node === null) {
       return;
     }
     if (node.right !== null) {
-      prettyPrint(node.right, `${prefix}${isLeft ? "│   " : "    "}`, false);
+      this.prettyPrint(node.right, `${prefix}${isLeft ? "│   " : "    "}`, false);
     }
-    console.log(`${prefix}${isLeft ? "└── " : "┌── "}${node.data}`);
+    console.log(`${prefix}${isLeft ? "└── " : "┌── "}${node.value}`);
     if (node.left !== null) {
-      prettyPrint(node.left, `${prefix}${isLeft ? "    " : "│   "}`, true);
+      this.prettyPrint(node.left, `${prefix}${isLeft ? "    " : "│   "}`, true);
     }
   };
 };
 
 
-/*let arr = [3, 2, 1];
+let arr = [3, 2, 1];
 let tree = new Tree(arr);
 tree.prettyPrint();
-console.log(tree.isBalanced());*/
-let arr = [10, 9, 8, 7, 6, 5, 4, 3, 2, 1];
+console.log(tree.isBalanced());
+arr = [10, 9, 8, 7, 6, 5, 4, 3, 2, 1];
 tree = new Tree(arr);
 tree.prettyPrint();
 /*
