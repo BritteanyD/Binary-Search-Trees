@@ -47,7 +47,7 @@ class Tree {
     }
   };
 
-  height = (currentNode) => {
+  height = (currentNode = this.root) => {
     //base case
     if (currentNode === null) {
       return 0;
@@ -213,6 +213,56 @@ class Tree {
       return null;
   }
 
+  inorder = (cb, curNode = this.root) => {
+    //bc
+    if (curNode === null) {
+      return [];
+    }
+
+    const res = this.inorder(cb, curNode.left);
+    if (cb) {
+      cb(curNode);
+    } else {
+      res.push(curNode.value);
+    }
+
+    res.push(...this.inorder(cb, curNode.right));
+    return res;
+  };
+
+  preorder = (cb, curNode = this.root) => {
+    //bc
+    if (curNode === null) {
+      return [];
+    }
+    const res = [];
+    if (cb) {
+      cb(curNode);
+    } else {
+      res.push(curNode.value);
+    }
+
+    res.push(...this.preorder(cb, curNode.left));
+    res.push(...this.preorder(cb, curNode.right));
+    return res;
+  };
+  postorder = (cb, curNode = this.root) => {
+    //bc
+    if (curNode === null) {
+      return [];
+    }
+    const res = this.postorder(cb, curNode.left);
+    res.push(...this.postorder(cb, curNode.right));
+    if (cb) {
+      cb(curNode);
+    } else {
+      res.push(curNode.value);
+    }
+
+    return res;
+  };
+
+
 
   prettyPrint = (node = this.root, prefix = "", isLeft = true) => {
     if (node === null) {
@@ -262,7 +312,7 @@ console.log(tree.levelOrderRecursive());
 tree.levelOrderRecursive(({ value }) => {
   console.log(`value: ${value}`);
 });
-/*console.log(tree.inorder());
+console.log(tree.inorder());
 tree.inorder(({ value }) => {
   console.log(`value: ${value}`);
 });
@@ -328,4 +378,4 @@ function driverScript() {
 }
 
 // Running the driver script
-driverScript();*/
+driverScript();
