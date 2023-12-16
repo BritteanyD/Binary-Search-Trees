@@ -75,6 +75,32 @@ class Tree {
       }
     }
   };
+  deleteNode = (value) => {
+    let currentNode = this.root, parentNode = null
+    while (currentNode !== value) {
+        parentNode = currentNode
+      if (currentNode.value < value) {
+        currentNode = currentNode.right;
+      } else {
+        
+        currentNode = currentNode.left;
+      }
+    }
+    //node value doesn't exist
+    if(currentNode === null){
+        return
+    }
+    // leaf node
+    if (currentNode.left === null && currentNode.right === null) {
+        if (value < parentNode.value) {
+            parentNode.left = null
+        }
+        else { 
+            parentNode.right = null
+        }
+    }
+  }
+
 
   prettyPrint = (node = this.root, prefix = "", isLeft = true) => {
     if (node === null) {
