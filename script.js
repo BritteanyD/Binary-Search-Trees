@@ -79,7 +79,7 @@ class Tree {
   deleteNode = value => {
     let curNode = this.root;
     let parentNode = null;
-    while (curNode.value !== value) {
+    while (curNode !== null && curNode.value !== value) {
       parentNode = curNode;
       if (curNode.value > value) {
         curNode = curNode.left;
@@ -139,8 +139,6 @@ class Tree {
     }
   };
 
-  
-
   levelOrderRecursive = (cb) => {
     const map = new Map();
     this.levelOrderRecursiveHelper(this.root, 1, map);
@@ -199,6 +197,22 @@ class Tree {
       return res;
     }
   };
+
+  find = (value) => {
+    let curNode = this.root;
+    while (curNode !== null) {
+        if (curNode.value > value) {
+          curNode = curNode.left;
+        } else if (curNode.value === value) {
+            return curNode
+        }
+        else {
+          curNode = curNode.right;
+        }
+      }
+      return null;
+  }
+
 
   prettyPrint = (node = this.root, prefix = "", isLeft = true) => {
     if (node === null) {
