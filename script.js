@@ -262,6 +262,11 @@ class Tree {
     return res;
   };
 
+  rebalance = () => {
+    const arr = this.inorder()
+    const balanceTree = this.buildTree(arr)
+    this.root = balanceTree
+  }
 
 
   prettyPrint = (node = this.root, prefix = "", isLeft = true) => {
