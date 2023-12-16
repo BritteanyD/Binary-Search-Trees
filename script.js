@@ -99,8 +99,44 @@ class Tree {
             parentNode.right = null
         }
     }
+    //two children
+    else if (currentNode.left !== null && currentNode.right !== null) {
+        this.deleteNodeWith2Children(curNode);
+    }
+    // one child
+    else {
+        if (currentNode.left !== null) {
+            currentNode.value = currentNode.left.value;
+            currentNode.left = null;
+          } else {
+            currentNode.value = currentNode.right.value;
+            currentNode.right = null;
+          }
+    }
   }
 
+deleteNodeWith2Children = nodeToDelete => {
+    const value = nodeToDelete.value;
+    let curNode = this.root,
+      inorderSuccessorNode = null,
+      parentOfInorderSuccessorNode = null;
+    while (curNode !== null) {
+      if (curNode.value > value) {
+        parentOfInorderSuccessorNode = inorderSuccessorNode;
+        inorderSuccessorNode = curNode;
+        curNode = curNode.left;
+      } else {
+        curNode = curNode.right;
+      }
+    }
+
+    nodeToDelete.value = inorderSuccessorNode.value;
+    if (inorderSuccessorNode.value < parentOfInorderSuccessorNode.value) {
+      parentOfInorderSuccessorNode.left = null;
+    } else {
+      parentOfInorderSuccessorNode.right = null;
+    }
+  };
 
   prettyPrint = (node = this.root, prefix = "", isLeft = true) => {
     if (node === null) {
@@ -134,7 +170,7 @@ tree.insert(1);
 tree.prettyPrint();
 tree.insert(23);
 tree.prettyPrint();
-/*tree.delete(55);
+tree.delete(55);
 tree.prettyPrint();
 tree.delete(33);
 tree.prettyPrint();
@@ -150,7 +186,7 @@ console.log(tree.levelOrderRecursive());
 tree.levelOrderRecursive(({ value }) => {
   console.log(`value: ${value}`);
 });
-console.log(tree.inorder());
+/*console.log(tree.inorder());
 tree.inorder(({ value }) => {
   console.log(`value: ${value}`);
 });
