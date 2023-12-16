@@ -29,6 +29,33 @@ class Tree {
     newNode.right = this.buildTreeHelper(arr, mid + 1, right)
     return newNode;
   }
+  isBalanced = () => {
+    const res = this.isBalancedHelper();
+    return res === -1 ? false : true;
+  };
+  isBalancedHelper = (cur = this.root) => {
+    //bc
+    if (cur === null) {
+      return 0;
+    }
+    const left = this.isBalancedHelper(cur.left),
+      right = this.isBalancedHelper(cur.right);
+    if (left === -1 ||  right === -1 ||  Math.abs(left - right) > 1) {
+      return -1;
+    } else {
+      return Math.max(this.height(cur.left), this.height(cur.right)) + 1;
+    }
+  };
+
+  height = (currentNode) => {
+    //base case
+    if(currentNode === null) {
+        return 0
+    }
+    const leftHeight = this.height(currentNode.left),
+    rightHeight = this.height(currentNode.right);
+    return Math.max(leftHeight, rightHeight) + 1;
+  }
 
   prettyPrint = (node = this.root, prefix = "", isLeft = true) => {
     if (node === null) {
