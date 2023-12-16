@@ -10,21 +10,36 @@ class Tree {
   constructor(arr) {
     this.root = this.buildTree(arr);
   }
-  buildTree(arr) {
-    //Sort and remove duplicates here
-    function buildBalancedTree(arr, start, end) {}
+  buildTree = (arr) => {
+    console.log(arr);
+    arr.sort(function(a, b) {
+        return a - b;
+    });
+    console.log(arr);
   }
+  prettyPrint = (node, prefix = "", isLeft = true) => {
+    if (node === null) {
+      return;
+    }
+    if (node.right !== null) {
+      prettyPrint(node.right, `${prefix}${isLeft ? "│   " : "    "}`, false);
+    }
+    console.log(`${prefix}${isLeft ? "└── " : "┌── "}${node.data}`);
+    if (node.left !== null) {
+      prettyPrint(node.left, `${prefix}${isLeft ? "    " : "│   "}`, true);
+    }
+  };
 };
 
 
-let arr = [1, 2, 3];
+/*let arr = [3, 2, 1];
 let tree = new Tree(arr);
 tree.prettyPrint();
-console.log(tree.isBalanced());
-arr = [57, 8, 33, 55, 29, 7, 72, 9, 71, 20];
+console.log(tree.isBalanced());*/
+let arr = [10, 9, 8, 7, 6, 5, 4, 3, 2, 1];
 tree = new Tree(arr);
 tree.prettyPrint();
-
+/*
 tree.insert(30);
 tree.prettyPrint();
 tree.insert(1);
@@ -113,4 +128,4 @@ function driverScript() {
 }
 
 // Running the driver script
-driverScript();
+driverScript();*/
